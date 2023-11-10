@@ -1,0 +1,51 @@
+@page "/department"
+
+@using MySQL.Data;
+@using MySql.Data.MySqlClient;
+@using System.Data;
+@using Data;
+@inject Database DBConnect
+
+<div class="container-fluid">
+    <div class="d-flex flex-row">
+        <table class="table table-striped table-light">
+            <thead>
+                <tr>
+                    <th scope="col">de_id</th>
+                    <th scope="col">de_name</th>
+                     <th scope="col">salary</th>
+                     
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in dtDepartment.Rows)
+                {
+                    string de_id = row["de_id"].ToString();
+                    string de_name = row["de_name"].ToString();
+                       string salary = row["salary"].ToString();
+
+                    <tr>
+                        <th>@de_id</th>
+                        <th>@de_name</th>
+                         <th >@salary</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    DataTable dtDepartment = new DataTable();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SomeStartupTask();
+        dtDepartment = DBConnect.GetDepartmentData(); // ใช้เมธอดที่ถูกต้องเพื่อดึงข้อมูลแผนก
+    }
+
+    Task SomeStartupTask()
+    {
+        return Task.CompletedTask;
+    }
+}

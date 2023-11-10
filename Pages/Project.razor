@@ -1,0 +1,60 @@
+@page "/project"
+
+@using MySQL.Data;
+@using MySql.Data.MySqlClient;
+@using System.Data;
+@using Data;
+@inject Database DBConnect
+
+<div class="container-fluid">
+    <div class="d-flex flex-row">
+        <table class="table table-striped table-light">
+            <thead>
+                <tr>
+                    <th scope="col">pro_id</th>
+                    <th scope="col">pro_name</th>
+                     <th scope="col">pro_type</th>
+                     <th scope="col">location</th>
+                     <th scope="col">budget</th>
+                     <th scope="col">pro_sts</th>
+                     
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in dtProject.Rows)
+                {
+                    string pro_id = row["pro_id"].ToString();
+                    string pro_name = row["pro_name"].ToString();
+                       string pro_type = row["pro_type"].ToString();
+                       string location = row["location"].ToString();
+                       string budget = row["budget"].ToString();
+                       string pro_sts = row["pro_sts"].ToString();
+
+                    <tr>
+                        <th>@pro_id</th>
+                        <th>@pro_name</th>
+                         <th >@pro_type</th>
+                         <th >@location</th>
+                         <th >@budget</th>
+                         <th >@pro_sts</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    DataTable dtProject = new DataTable();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SomeStartupTask();
+        dtProject = DBConnect.GetProjectData(); // ใช้เมธอดที่ถูกต้องเพื่อดึงข้อมูลแผนก
+    }
+
+    Task SomeStartupTask()
+    {
+        return Task.CompletedTask;
+    }
+}

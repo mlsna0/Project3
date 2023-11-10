@@ -1,0 +1,85 @@
+﻿@page "/"
+
+@using MySQL.Data;
+@using MySql.Data.MySqlClient;
+@using System.Data;
+
+@using Data;
+
+@inject Database DBConnect
+
+<div class="container-fluid">
+    <div class="d-flex flex-row">
+        <form>
+            <div class="mb-3">
+                <label for="empId" class="form-label">Employee ID</label>
+                <input type="text" class="form-control" id="empId" @bind="employeeId">
+            </div>
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" @bind="firstName">
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" @bind="lastName">
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <input type="text" class="form-control" id="gender" @bind="gender">
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="AddEmployee">Add Employee</button>
+        </form>
+
+        <table class="table table-striped table-light">
+            <thead>
+                <tr>
+                    <th scope="col">emp_id</th>
+                    <th scope="col">first_name</th>
+                    <th scope="col">last_name</th>
+                    <th scope="col">gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in dtEmployee.Rows)
+                {
+                    string emp_id = row["emp_id"].ToString();
+                    string first_name = row["first_name"].ToString();
+                    string last_name = row["last_name"].ToString();
+                    string gender = row["gender"].ToString();
+
+                    <tr>
+                        <th scope="row">@emp_id</th>
+                        <th >@first_name</th>
+                        <th >@last_name</th>
+                        <th >@gender</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    DataTable dtEmployee = new DataTable();
+    string employeeId;
+    string firstName;
+    string lastName;
+    string gender;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SomeStartupTask();
+        dtEmployee = DBConnect.MySQLConnection_DataTable();
+    }
+
+    Task SomeStartupTask()
+    {
+        return Task.CompletedTask;
+    }
+
+    async Task AddEmployee()
+    {
+
+        dtEmployee = DBConnect.MySQLConnection_DataTable();
+    }
+}
